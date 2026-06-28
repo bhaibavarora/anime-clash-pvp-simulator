@@ -1,0 +1,6 @@
+{
+  "name": "Anime Clash PvP Simulator",
+  "description": "Create rooms, play with AI or up to 6 players, clash using anime characters or dual/triplet character combos, render Roblox-like 3D blocky anime models, and level up to unlock characters.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
