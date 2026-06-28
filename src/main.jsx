@@ -2,118 +2,162 @@ import React, { useState } from "react";
 import { createRoot } from "react-dom/client";
 
 function App() {
+
   const fighters = [
-    { name: "Naruto 🔥", power: "Rasengan" },
-    { name: "Goku ⚡", power: "Kamehameha" },
-    { name: "Ichigo 🗡️", power: "Getsuga Tensho" }
+    {
+      name:"Naruto 🔥",
+      power:"Rasengan",
+      image:"https://i.imgur.com/6X4R3Qf.png"
+    },
+    {
+      name:"Goku ⚡",
+      power:"Kamehameha",
+      image:"https://i.imgur.com/8Km9tLL.png"
+    },
+    {
+      name:"Ichigo 🗡️",
+      power:"Getsuga",
+      image:"https://i.imgur.com/3ZQ3Z8s.png"
+    }
   ];
 
-  const [fighter, setFighter] = useState(null);
-  const [playerHP, setPlayerHP] = useState(100);
-  const [enemyHP, setEnemyHP] = useState(100);
-  const [message, setMessage] = useState("");
 
-  function attack() {
-    if (!fighter) {
-      setMessage("Pick a fighter first!");
+  const [fighter,setFighter] = useState(null);
+  const [playerHP,setPlayerHP] = useState(100);
+  const [enemyHP,setEnemyHP] = useState(100);
+  const [message,setMessage] = useState("");
+
+
+  function attack(){
+
+    if(!fighter){
+      setMessage("Choose a fighter!");
       return;
     }
 
-    let damage = Math.floor(Math.random() * 25) + 10;
-    let enemyAttack = Math.floor(Math.random() * 15) + 5;
+    let damage = Math.floor(Math.random()*25)+10;
+    let hit = Math.floor(Math.random()*15)+5;
 
-    setEnemyHP(Math.max(enemyHP - damage, 0));
-    setPlayerHP(Math.max(playerHP - enemyAttack, 0));
+
+    setEnemyHP(Math.max(enemyHP-damage,0));
+    setPlayerHP(Math.max(playerHP-hit,0));
+
 
     setMessage(
-      `${fighter.name} used ${fighter.power}! ⚔️ Damage: ${damage}`
+      `${fighter.name} used ${fighter.power}! ⚔️`
     );
+
   }
 
-  return (
-    <div style={{
-      padding:"30px",
-      fontFamily:"Arial",
-      textAlign:"center"
-    }}>
 
-      <h1>⚔️ Anime Clash PvP Simulator ⚔️</h1>
+return (
 
-      <h2>Select Fighter</h2>
-
-      {fighters.map((f)=>(
-        <button
-          key={f.name}
-          onClick={()=>setFighter(f)}
-          style={{
-            margin:"8px",
-            padding:"12px"
-          }}
-        >
-          {f.name}
-        </button>
-      ))}
+<div style={{
+textAlign:"center",
+fontFamily:"Arial",
+padding:"30px"
+}}>
 
 
-      <h2>🔥 VS BATTLE 🔥</h2>
-
-      <h2>
-        {fighter ? fighter.name : "???"} 
-        {" VS "}
-        👹 Enemy
-      </h2>
+<h1>⚔️ Anime Clash PvP Simulator ⚔️</h1>
 
 
-      <h3>❤️ Player HP: {playerHP}</h3>
-
-      <div style={{
-        width:"300px",
-        margin:"auto",
-        border:"2px solid black"
-      }}>
-        <div style={{
-          width:`${playerHP}%`,
-          height:"25px",
-          background:"lime"
-        }} />
-      </div>
+<h2>Choose Fighter</h2>
 
 
-      <br/>
+{
+fighters.map((f)=>(
 
+<button
+key={f.name}
+onClick={()=>setFighter(f)}
+style={{
+margin:"10px",
+padding:"12px"
+}}
+>
 
-      <h3>👹 Enemy HP: {enemyHP}</h3>
+{f.name}
 
-      <div style={{
-        width:"300px",
-        margin:"auto",
-        border:"2px solid black"
-      }}>
-        <div style={{
-          width:`${enemyHP}%`,
-          height:"25px",
-          background:"red"
-        }} />
-      </div>
+</button>
 
-
-      <br/>
-
-      <button
-        onClick={attack}
-        style={{
-          padding:"15px",
-          fontSize:"18px"
-        }}
-      >
-        ⚔️ ATTACK
-      </button>
-
-
-      <h3>{message}</h3>
-
-    </div>
-  );
+))
 }
+
+
+
+<h2>🔥 VS BATTLE 🔥</h2>
+
+
+<div style={{
+display:"flex",
+justifyContent:"center",
+gap:"50px"
+}}>
+
+
+<div>
+
+<h3>
+{fighter ? fighter.name : "You"}
+</h3>
+
+{
+fighter &&
+<img
+src={fighter.image}
+width="150"
+/>
+}
+
+<p>❤️ HP {playerHP}</p>
+
+</div>
+
+
+<h1>VS</h1>
+
+
+<div>
+
+<h3>Enemy 👹</h3>
+
+<img
+src="https://i.imgur.com/5NZ6e9p.png"
+width="150"
+/>
+
+<p>❤️ HP {enemyHP}</p>
+
+</div>
+
+
+</div>
+
+
+
+<button
+onClick={attack}
+style={{
+fontSize:"20px",
+padding:"15px",
+margin:"20px"
+}}
+>
+
+⚔️ ATTACK
+
+</button>
+
+
+<h2>{message}</h2>
+
+
+</div>
+
+);
+
+}
+
 
 createRoot(document.getElementById("root")).render(<App />);
