@@ -2,88 +2,113 @@ import React, { useState } from "react";
 import { createRoot } from "react-dom/client";
 
 function App() {
-  const [fighter, setFighter] = useState("");
+  const fighters = [
+    { name: "Naruto 🔥", power: "Rasengan" },
+    { name: "Goku ⚡", power: "Kamehameha" },
+    { name: "Ichigo 🗡️", power: "Getsuga Tensho" }
+  ];
+
+  const [fighter, setFighter] = useState(null);
   const [playerHP, setPlayerHP] = useState(100);
   const [enemyHP, setEnemyHP] = useState(100);
   const [message, setMessage] = useState("");
 
   function attack() {
     if (!fighter) {
-      setMessage("Choose your fighter!");
+      setMessage("Pick a fighter first!");
       return;
     }
 
-    const damage = Math.floor(Math.random() * 20) + 5;
-    const enemyHit = Math.floor(Math.random() * 15) + 3;
+    let damage = Math.floor(Math.random() * 25) + 10;
+    let enemyAttack = Math.floor(Math.random() * 15) + 5;
 
-    const newEnemy = Math.max(enemyHP - damage, 0);
-    const newPlayer = Math.max(playerHP - enemyHit, 0);
+    setEnemyHP(Math.max(enemyHP - damage, 0));
+    setPlayerHP(Math.max(playerHP - enemyAttack, 0));
 
-    setEnemyHP(newEnemy);
-    setPlayerHP(newPlayer);
-
-    if (newEnemy === 0) {
-      setMessage("🏆 Victory! Enemy defeated!");
-    } else if (newPlayer === 0) {
-      setMessage("💀 Defeat! Try again!");
-    } else {
-      setMessage(
-        `${fighter} dealt ${damage} damage ⚔️ Enemy hit you for ${enemyHit}`
-      );
-    }
+    setMessage(
+      `${fighter.name} used ${fighter.power}! ⚔️ Damage: ${damage}`
+    );
   }
 
   return (
-    <div style={{fontFamily:"Arial", padding:"20px"}}>
+    <div style={{
+      padding:"30px",
+      fontFamily:"Arial",
+      textAlign:"center"
+    }}>
+
       <h1>⚔️ Anime Clash PvP Simulator ⚔️</h1>
 
-      <h2>Choose your fighter</h2>
+      <h2>Select Fighter</h2>
 
-      <button onClick={()=>setFighter("Naruto 🔥")}>Naruto</button>
-      <button onClick={()=>setFighter("Goku ⚡")}>Goku</button>
-      <button onClick={()=>setFighter("Ichigo 🗡️")}>Ichigo</button>
+      {fighters.map((f)=>(
+        <button
+          key={f.name}
+          onClick={()=>setFighter(f)}
+          style={{
+            margin:"8px",
+            padding:"12px"
+          }}
+        >
+          {f.name}
+        </button>
+      ))}
 
-      <h2>🔥 Battle Arena 🔥</h2>
 
-      <h3>Your Fighter: {fighter}</h3>
+      <h2>🔥 VS BATTLE 🔥</h2>
 
-      <div>
-        ❤️ Player HP
+      <h2>
+        {fighter ? fighter.name : "???"} 
+        {" VS "}
+        👹 Enemy
+      </h2>
+
+
+      <h3>❤️ Player HP: {playerHP}</h3>
+
+      <div style={{
+        width:"300px",
+        margin:"auto",
+        border:"2px solid black"
+      }}>
         <div style={{
-          width:"300px",
+          width:`${playerHP}%`,
           height:"25px",
-          border:"2px solid black"
-        }}>
-          <div style={{
-            width:`${playerHP}%`,
-            height:"100%",
-            background:"green"
-          }}></div>
-        </div>
+          background:"lime"
+        }} />
       </div>
+
 
       <br/>
 
-      <div>
-        👹 Enemy HP
+
+      <h3>👹 Enemy HP: {enemyHP}</h3>
+
+      <div style={{
+        width:"300px",
+        margin:"auto",
+        border:"2px solid black"
+      }}>
         <div style={{
-          width:"300px",
+          width:`${enemyHP}%`,
           height:"25px",
-          border:"2px solid black"
-        }}>
-          <div style={{
-            width:`${enemyHP}%`,
-            height:"100%",
-            background:"red"
-          }}></div>
-        </div>
+          background:"red"
+        }} />
       </div>
+
 
       <br/>
 
-      <button onClick={attack}>
-        ⚔️ Attack
+      <button
+        onClick={attack}
+        style={{
+          padding:"15px",
+          fontSize:"18px"
+        }}
+      >
+        ⚔️ ATTACK
       </button>
+
 
       <h3>{message}</h3>
 
