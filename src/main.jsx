@@ -14,8 +14,7 @@ function App() {
 
       <h2>Battle Arena</h2>
 
-      <p>Your fighter attacks the enemy!</p>
-
+      <p>Your fighter attacks the enemy!</p> 
     </div>
   );
 }
