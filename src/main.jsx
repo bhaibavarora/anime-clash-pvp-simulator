@@ -1,49 +1,63 @@
 import React, { useState } from "react";
 import { createRoot } from "react-dom/client";
 
-function App() {
+function App(){
 
-  const [fighter, setFighter] = useState("");
-  const [message, setMessage] = useState("");
+const [fighter,setFighter] = useState("");
+const [playerHP,setPlayerHP] = useState(100);
+const [enemyHP,setEnemyHP] = useState(100);
+const [message,setMessage] = useState("");
 
-  function attack() {
-    setMessage(fighter + " attacks the enemy ⚔️");
-  }
+function attack(){
 
-  return (
-    <div>
+let damage = Math.floor(Math.random()*20)+5;
 
-      <h1>⚔️ Anime Clash PvP Simulator ⚔️</h1>
+setEnemyHP(enemyHP-damage);
 
-      <h2>Choose your fighter</h2>
+setMessage(
+fighter + " attacked enemy for " + damage + " damage ⚔️"
+);
 
-      <button onClick={() => setFighter("Naruto 🔥")}>
-        Naruto
-      </button>
+}
 
-      <button onClick={() => setFighter("Goku ⚡")}>
-        Goku
-      </button>
+return(
+<div>
 
-      <button onClick={() => setFighter("Ichigo 🗡️")}>
-        Ichigo
-      </button>
+<h1>⚔️ Anime Clash PvP Simulator ⚔️</h1>
+
+<h2>Choose your fighter</h2>
+
+<button onClick={()=>setFighter("Naruto 🔥")}>
+Naruto
+</button>
+
+<button onClick={()=>setFighter("Goku ⚡")}>
+Goku
+</button>
+
+<button onClick={()=>setFighter("Ichigo 🗡️")}>
+Ichigo
+</button>
 
 
-      <h2>Battle Arena</h2>
+<h2>Battle Arena</h2>
 
-      <h3>{fighter}</h3>
+<h3>{fighter}</h3>
 
-      <button onClick={attack}>
-        Attack ⚔️
-      </button>
+<p>Your HP: {playerHP}</p>
 
-      <p>{message}</p>
+<p>Enemy HP: {enemyHP}</p>
 
-    </div>
-  );
+<button onClick={attack}>
+Attack ⚔️
+</button>
+
+<p>{message}</p>
+
+
+</div>
+)
+
 }
 
 createRoot(document.getElementById("root")).render(<App />);
-
-
