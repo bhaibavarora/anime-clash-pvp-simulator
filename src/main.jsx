@@ -1,7 +1,3 @@
-
-
-
-
 import React, {useState} from "react";
 import {createRoot} from "react-dom/client";
 
@@ -10,18 +6,15 @@ function App(){
 const fighters=[
 {
 name:"Naruto 🔥",
-move:"Rasengan",
-emoji:"🌀"
+move:"Rasengan"
 },
 {
 name:"Goku ⚡",
-move:"Kamehameha",
-emoji:"💥"
+move:"Kamehameha"
 },
 {
 name:"Ichigo 🗡️",
-move:"Getsuga",
-emoji:"🌙"
+move:"Getsuga"
 }
 ];
 
@@ -30,47 +23,60 @@ const [fighter,setFighter]=useState(null);
 const [playerHP,setPlayerHP]=useState(100);
 const [enemyHP,setEnemyHP]=useState(100);
 const [energy,setEnergy]=useState(100);
-const [msg,setMsg]=useState("");
+
+const [level,setLevel]=useState(1);
+const [xp,setXP]=useState(0);
+const [coins,setCoins]=useState(0);
+
+const [message,setMessage]=useState("");
+
 
 
 function attack(){
 
 if(!fighter){
-setMsg("Choose fighter first!");
+setMessage("Choose fighter first!");
 return;
 }
+
 
 if(energy < 20){
-setMsg("Not enough energy ⚡");
+setMessage("⚡ Need more energy!");
 return;
 }
 
 
-let damage=Math.floor(Math.random()*30)+15;
-let enemyDamage=Math.floor(Math.random()*20)+5;
+let damage=Math.floor(Math.random()*30)+10;
+
+let enemyHit=Math.floor(Math.random()*15)+5;
 
 
-setEnemyHP(Math.max(enemyHP-damage,0));
-setPlayerHP(Math.max(playerHP-enemyDamage,0));
+let newEnemy=Math.max(enemyHP-damage,0);
+
+setEnemyHP(newEnemy);
+
+setPlayerHP(Math.max(playerHP-enemyHit,0));
+
 setEnergy(energy-20);
 
 
-if(enemyHP-damage <=0){
+if(newEnemy===0){
 
-setMsg("🏆 YOU WIN!");
+setXP(xp+100);
+setCoins(coins+50);
 
+if(xp>=100){
+setLevel(level+1);
 }
 
-else if(playerHP-enemyDamage <=0){
-
-setMsg("💀 YOU LOST!");
+setMessage("🏆 Victory! +100 XP +50 Coins");
 
 }
 
 else{
 
-setMsg(
-`${fighter.emoji} ${fighter.name} used ${fighter.move}! Damage ${damage}`
+setMessage(
+`${fighter.name} used ${fighter.move}! ⚔️ ${damage} damage`
 );
 
 }
@@ -79,12 +85,11 @@ setMsg(
 
 
 
-function reset(){
+function recharge(){
 
-setPlayerHP(100);
-setEnemyHP(100);
 setEnergy(100);
-setMsg("");
+
+setMessage("⚡ Energy restored!");
 
 }
 
@@ -100,6 +105,11 @@ padding:"30px"
 
 
 <h1>⚔️ Anime Clash PvP Simulator ⚔️</h1>
+
+
+<h3>
+⭐ Level: {level} | XP: {xp} | 🪙 Coins: {coins}
+</h3>
 
 
 <h2>Select Fighter</h2>
@@ -126,84 +136,42 @@ padding:"12px"
 }
 
 
-
-<h2>🔥 BATTLE ARENA 🔥</h2>
-
-
 <h2>
 {fighter ? fighter.name:"???"}
  VS 👹 Enemy
 </h2>
 
 
-<h3>❤️ Your HP: {playerHP}</h3>
-
-<div style={{
-width:"300px",
-height:"25px",
-border:"2px solid black",
-margin:"auto"
-}}>
-
-<div style={{
-width:`${playerHP}%`,
-height:"100%",
-background:"green"
-}}/>
-
-</div>
-
-
+<h3>❤️ Player HP: {playerHP}</h3>
 
 <h3>👹 Enemy HP: {enemyHP}</h3>
-
-<div style={{
-width:"300px",
-height:"25px",
-border:"2px solid black",
-margin:"auto"
-}}>
-
-<div style={{
-width:`${enemyHP}%`,
-height:"100%",
-background:"red"
-}}/>
-
-</div>
-
 
 
 <h3>⚡ Energy: {energy}</h3>
 
 
-<button
-onClick={attack}
-style={{
-padding:"15px",
-fontSize:"18px"
-}}
->
-⚔️ Special Attack
+<button onClick={attack}>
+⚔️ Attack
 </button>
 
 
-<br/><br/>
-
-
-<button onClick={reset}>
-🔄 Restart Battle
+<button onClick={recharge}>
+⚡ Recharge
 </button>
 
 
-<h2>{msg}</h2>
+<h2>{message}</h2>
 
 
 </div>
 
-);
+)
 
 }
 
 
 createRoot(document.getElementById("root")).render(<App/>);
+
+
+
+
