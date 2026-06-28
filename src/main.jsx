@@ -1,22 +1,47 @@
-import React from "react";
-import { createRoot } from "react-dom/client";
+import React, {useState} from "react";
+import {createRoot} from "react-dom/client";
 
-function App() {
-  return (
-    <div>
-      <h1>⚔️ Anime Clash PvP Simulator ⚔️</h1>
+function App(){
 
-      <h2>Choose your fighter</h2>
+const [fighter,setFighter] = useState("");
+const [message,setMessage] = useState("");
 
-      <button>🔥 Naruto</button>
-      <button>⚡ Goku</button>
-      <button>🌑 Ichigo</button>
-
-      <h2>Battle Arena</h2>
-
-      <p>Your fighter attacks the enemy!</p> 
-    </div>
-  );
+function attack(){
+ setMessage(fighter + " attacks the enemy! ⚔️");
 }
 
-createRoot(document.getElementById("root")).render(<App />);
+return(
+<div>
+
+<h1>⚔️ Anime Clash PvP Simulator ⚔️</h1>
+
+<h2>Choose your fighter</h2>
+
+<button onClick={()=>setFighter("Naruto 🔥")}>
+Naruto
+</button>
+
+<button onClick={()=>setFighter("Goku ⚡")}>
+Goku
+</button>
+
+<button onClick={()=>setFighter("Ichigo 🗡️")}>
+Ichigo
+</button>
+
+<h2>Battle Arena</h2>
+
+<h3>{fighter}</h3>
+
+<button onClick={attack}>
+Attack 💥
+</button>
+
+<p>{message}</p>
+
+</div>
+)
+
+}
+
+createRoot(document.getElementById("root")).render(<App/>);
