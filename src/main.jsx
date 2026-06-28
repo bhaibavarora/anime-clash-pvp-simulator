@@ -40,7 +40,7 @@ Attack 💥
 <p>{message}</p>
 
 </div>
-)
+)  
 
 }
 
