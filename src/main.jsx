@@ -1,56 +1,92 @@
-import React, { useState } from "react";
-import { createRoot } from "react-dom/client";
+import React, {useState} from "react";
+import {createRoot} from "react-dom/client";
 
-function App() {
+function App(){
 
-  const fighters = [
-    {
-      name:"Naruto 🔥",
-      power:"Rasengan",
-      image:"https://i.imgur.com/6X4R3Qf.png"
-    },
-    {
-      name:"Goku ⚡",
-      power:"Kamehameha",
-      image:"https://i.imgur.com/8Km9tLL.png"
-    },
-    {
-      name:"Ichigo 🗡️",
-      power:"Getsuga",
-      image:"https://i.imgur.com/3ZQ3Z8s.png"
-    }
-  ];
-
-
-  const [fighter,setFighter] = useState(null);
-  const [playerHP,setPlayerHP] = useState(100);
-  const [enemyHP,setEnemyHP] = useState(100);
-  const [message,setMessage] = useState("");
+const fighters=[
+{
+name:"Naruto 🔥",
+move:"Rasengan",
+emoji:"🌀"
+},
+{
+name:"Goku ⚡",
+move:"Kamehameha",
+emoji:"💥"
+},
+{
+name:"Ichigo 🗡️",
+move:"Getsuga",
+emoji:"🌙"
+}
+];
 
 
-  function attack(){
-
-    if(!fighter){
-      setMessage("Choose a fighter!");
-      return;
-    }
-
-    let damage = Math.floor(Math.random()*25)+10;
-    let hit = Math.floor(Math.random()*15)+5;
+const [fighter,setFighter]=useState(null);
+const [playerHP,setPlayerHP]=useState(100);
+const [enemyHP,setEnemyHP]=useState(100);
+const [energy,setEnergy]=useState(100);
+const [msg,setMsg]=useState("");
 
 
-    setEnemyHP(Math.max(enemyHP-damage,0));
-    setPlayerHP(Math.max(playerHP-hit,0));
+function attack(){
+
+if(!fighter){
+setMsg("Choose fighter first!");
+return;
+}
+
+if(energy < 20){
+setMsg("Not enough energy ⚡");
+return;
+}
 
 
-    setMessage(
-      `${fighter.name} used ${fighter.power}! ⚔️`
-    );
-
-  }
+let damage=Math.floor(Math.random()*30)+15;
+let enemyDamage=Math.floor(Math.random()*20)+5;
 
 
-return (
+setEnemyHP(Math.max(enemyHP-damage,0));
+setPlayerHP(Math.max(playerHP-enemyDamage,0));
+setEnergy(energy-20);
+
+
+if(enemyHP-damage <=0){
+
+setMsg("🏆 YOU WIN!");
+
+}
+
+else if(playerHP-enemyDamage <=0){
+
+setMsg("💀 YOU LOST!");
+
+}
+
+else{
+
+setMsg(
+`${fighter.emoji} ${fighter.name} used ${fighter.move}! Damage ${damage}`
+);
+
+}
+
+}
+
+
+
+function reset(){
+
+setPlayerHP(100);
+setEnemyHP(100);
+setEnergy(100);
+setMsg("");
+
+}
+
+
+
+return(
 
 <div style={{
 textAlign:"center",
@@ -62,17 +98,17 @@ padding:"30px"
 <h1>⚔️ Anime Clash PvP Simulator ⚔️</h1>
 
 
-<h2>Choose Fighter</h2>
+<h2>Select Fighter</h2>
 
 
 {
-fighters.map((f)=>(
+fighters.map(f=>(
 
 <button
 key={f.name}
 onClick={()=>setFighter(f)}
 style={{
-margin:"10px",
+margin:"8px",
 padding:"12px"
 }}
 >
@@ -82,75 +118,81 @@ padding:"12px"
 </button>
 
 ))
+
 }
 
 
 
-<h2>🔥 VS BATTLE 🔥</h2>
+<h2>🔥 BATTLE ARENA 🔥</h2>
 
+
+<h2>
+{fighter ? fighter.name:"???"}
+ VS 👹 Enemy
+</h2>
+
+
+<h3>❤️ Your HP: {playerHP}</h3>
 
 <div style={{
-display:"flex",
-justifyContent:"center",
-gap:"50px"
+width:"300px",
+height:"25px",
+border:"2px solid black",
+margin:"auto"
 }}>
 
-
-<div>
-
-<h3>
-{fighter ? fighter.name : "You"}
-</h3>
-
-{
-fighter &&
-<img
-src={fighter.image}
-width="150"
-/>
-}
-
-<p>❤️ HP {playerHP}</p>
+<div style={{
+width:`${playerHP}%`,
+height:"100%",
+background:"green"
+}}/>
 
 </div>
 
 
-<h1>VS</h1>
 
+<h3>👹 Enemy HP: {enemyHP}</h3>
 
-<div>
+<div style={{
+width:"300px",
+height:"25px",
+border:"2px solid black",
+margin:"auto"
+}}>
 
-<h3>Enemy 👹</h3>
-
-<img
-src="https://i.imgur.com/5NZ6e9p.png"
-width="150"
-/>
-
-<p>❤️ HP {enemyHP}</p>
+<div style={{
+width:`${enemyHP}%`,
+height:"100%",
+background:"red"
+}}/>
 
 </div>
 
 
-</div>
 
+<h3>⚡ Energy: {energy}</h3>
 
 
 <button
 onClick={attack}
 style={{
-fontSize:"20px",
 padding:"15px",
-margin:"20px"
+fontSize:"18px"
 }}
 >
-
-⚔️ ATTACK
-
+⚔️ Special Attack
 </button>
 
 
-<h2>{message}</h2>
+<br/><br/>
+
+
+<button onClick={reset}>
+🔄 Restart Battle
+</button>
+
+
+<h2>{msg}</h2>
 
 
 </div>
@@ -160,4 +202,4 @@ margin:"20px"
 }
 
 
-createRoot(document.getElementById("root")).render(<App />);
+createRoot(document.getElementById("root")).render(<App/>);
