@@ -3,93 +3,84 @@ import {createRoot} from "react-dom/client";
 
 function App(){
 
-const fighters=[
+const [coins,setCoins]=useState(100);
+
+const [fighters,setFighters]=useState([
 {
 name:"Naruto 🔥",
-move:"Rasengan"
+move:"Rasengan",
+unlocked:true
 },
 {
 name:"Goku ⚡",
-move:"Kamehameha"
+move:"Kamehameha",
+unlocked:true
 },
 {
 name:"Ichigo 🗡️",
-move:"Getsuga"
+move:"Getsuga",
+unlocked:false
 }
-];
+]);
 
 
 const [fighter,setFighter]=useState(null);
-const [playerHP,setPlayerHP]=useState(100);
-const [enemyHP,setEnemyHP]=useState(100);
-const [energy,setEnergy]=useState(100);
 
-const [level,setLevel]=useState(1);
-const [xp,setXP]=useState(0);
-const [coins,setCoins]=useState(0);
+const [enemyHP,setEnemyHP]=useState(100);
 
 const [message,setMessage]=useState("");
+
+
+
+function unlock(index){
+
+if(coins>=50){
+
+let copy=[...fighters];
+
+copy[index].unlocked=true;
+
+setFighters(copy);
+
+setCoins(coins-50);
+
+setMessage("🎉 Fighter unlocked!");
+
+}
+
+else{
+
+setMessage("Need more coins 🪙");
+
+}
+
+}
 
 
 
 function attack(){
 
 if(!fighter){
-setMessage("Choose fighter first!");
-return;
-}
 
+setMessage("Choose fighter!");
 
-if(energy < 20){
-setMessage("⚡ Need more energy!");
 return;
+
 }
 
 
 let damage=Math.floor(Math.random()*30)+10;
 
-let enemyHit=Math.floor(Math.random()*15)+5;
+
+setEnemyHP(Math.max(enemyHP-damage,0));
 
 
-let newEnemy=Math.max(enemyHP-damage,0);
+setCoins(coins+10);
 
-setEnemyHP(newEnemy);
-
-setPlayerHP(Math.max(playerHP-enemyHit,0));
-
-setEnergy(energy-20);
-
-
-if(newEnemy===0){
-
-setXP(xp+100);
-setCoins(coins+50);
-
-if(xp>=100){
-setLevel(level+1);
-}
-
-setMessage("🏆 Victory! +100 XP +50 Coins");
-
-}
-
-else{
 
 setMessage(
-`${fighter.name} used ${fighter.move}! ⚔️ ${damage} damage`
+`${fighter.name} used ${fighter.move}! Damage ${damage} ⚔️ +10 coins`
 );
-
-}
-
-}
-
-
-
-function recharge(){
-
-setEnergy(100);
-
-setMessage("⚡ Energy restored!");
 
 }
 
@@ -107,47 +98,58 @@ padding:"30px"
 <h1>⚔️ Anime Clash PvP Simulator ⚔️</h1>
 
 
-<h3>
-⭐ Level: {level} | XP: {xp} | 🪙 Coins: {coins}
-</h3>
+<h2>🪙 Coins: {coins}</h2>
 
 
-<h2>Select Fighter</h2>
+<h2>🛒 Fighter Shop</h2>
 
 
 {
-fighters.map(f=>(
+
+fighters.map((f,index)=>(
+
+<div key={f.name}>
 
 <button
-key={f.name}
+
+disabled={!f.unlocked}
+
 onClick={()=>setFighter(f)}
-style={{
-margin:"8px",
-padding:"12px"
-}}
+
 >
 
-{f.name}
+{f.unlocked ? f.name : "🔒 Locked"}
 
 </button>
+
+
+{!f.unlocked &&
+
+<button onClick={()=>unlock(index)}>
+Unlock 50 🪙
+</button>
+
+}
+
+</div>
 
 ))
 
 }
 
 
-<h2>
-{fighter ? fighter.name:"???"}
- VS 👹 Enemy
-</h2>
+
+<h2>🔥 Battle Arena</h2>
 
 
-<h3>❤️ Player HP: {playerHP}</h3>
+<h3>
+You: {fighter ? fighter.name:"None"}
+</h3>
 
-<h3>👹 Enemy HP: {enemyHP}</h3>
 
-
-<h3>⚡ Energy: {energy}</h3>
+<h3>
+👹 Enemy HP: {enemyHP}
+</h3>
 
 
 <button onClick={attack}>
@@ -155,12 +157,7 @@ padding:"12px"
 </button>
 
 
-<button onClick={recharge}>
-⚡ Recharge
-</button>
-
-
-<h2>{message}</h2>
+<h3>{message}</h3>
 
 
 </div>
@@ -171,7 +168,3 @@ padding:"12px"
 
 
 createRoot(document.getElementById("root")).render(<App/>);
-
-
-
-
